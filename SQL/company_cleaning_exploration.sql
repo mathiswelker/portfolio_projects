@@ -92,6 +92,7 @@ FROM companies
 GROUP BY country
 ORDER BY country_percentage DESC;
 
+
 -- top 3 companies of each top 10 country(ranked by number of companies in the country)
 WITH ranked_companies AS 
 (SELECT country, organizationName, ROW_NUMBER() OVER (PARTITION BY country ORDER BY rank ASC) AS country_rank
