@@ -1,7 +1,7 @@
 ----- DATA CLEANING -----
 
 
---adding continent column to table companies so we can analyzy regionality
+--adding continent column to table companies so we can analyze regionality
 ALTER TABLE companies
 ADD continent NVARCHAR(50);
 
@@ -75,7 +75,24 @@ ALTER TABLE companies
 ALTER COLUMN rank INTEGER
 
 -- now we can order by rank
-SELECT * FROM companies ORDER BY rank;
+SELECT organizationName, rank FROM companies ORDER BY rank;
+
+
+----- FEATURE ENGINEERING -----------
+
+ALTER TABLE companies
+ADD profitMargin DECIMAL(18,2);
+
+UPDATE companies
+SET companies.profitMargin = (profits / revenue) * 100;
+
+-- Adding return on assets column
+ALTER TABLE companies
+ADD returnOnAssets DECIMAL(18,2);
+
+UPDATE companies
+SET companies.returnOnAssets = (profits / assets) * 100;
+
 
 ----- DATA EXPLORATION -----
 
@@ -92,6 +109,10 @@ FROM companies
 GROUP BY country
 ORDER BY country_percentage DESC;
 
+-- Top 10 organizations by profit margin
+SELECT TOP(10) organizationName, profitMargin
+FROM companies
+ORDER BY profitMargin DESC;
 
 -- top 3 companies of each top 10 country(ranked by number of companies in the country)
 WITH ranked_companies AS 
